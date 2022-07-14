@@ -1,0 +1,20 @@
+{
+  "name": "ortkreports_bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@grammyjs/files": "^1.0.4",
+    "@grammyjs/router": "^2.0.0",
+    "dotenv": "^16.0.1",
+    "grammy": "^1.9.1",
+    "mongoose": "^6.3.4",
+    "node-schedule": "^2.1.0",
+    "uuid": "^8.3.2"
+  }
+}
