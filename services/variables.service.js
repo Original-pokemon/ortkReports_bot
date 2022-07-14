@@ -1,4 +1,10 @@
-const { access, open, constants, writeFile, readFileSync } = require('fs')
+const {
+  accessSync,
+  openSync,
+  constants,
+  writeFileSync,
+  readFileSync,
+} = require('fs')
 
 function getVariables(path, varName) {
   const text =
@@ -9,16 +15,12 @@ function getVariables(path, varName) {
     'FILE_COUNTER=5\n' +
     'PHOTO_LIMIT=10'
 
-  access(path, constants.F_OK, (err) => {
-    if (err) {
-      open(path, 'w', (err) => {
-        if (err) throw err
-      })
-      writeFile(path, text, (err) => {
-        if (err) throw err
-      })
-    }
-  })
+  try {
+    accessSync(path, constants.F_OK)
+  } catch (err) {
+    openSync(path, 'w')
+    writeFileSync(path, text)
+  }
 
   const data = readFileSync(path, 'utf8')
   const arr = data.split('\n')
