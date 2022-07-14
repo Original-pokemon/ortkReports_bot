@@ -7,7 +7,7 @@
 ## Перед запуском
 
 Т.к бот работает на node.js, надо установить сам node.js:  
-https://nodejs.org/en/
+https://nodejs.org/en/  
 Используется mongodb так что стоит установить GUI:  
 https://www.mongodb.com/products/compass
 
