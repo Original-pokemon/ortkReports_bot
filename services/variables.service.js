@@ -9,7 +9,7 @@ const {
 function getVariables(path, varName) {
   const text =
     'ROOT_PATH=С:\\bot\\\n' +
-    'START_TIME=00 10 * * *\n' +
+    'START_TIME=0 10 * * *\n' +
     'STOP_TIME=30 19 * * *\n' +
     'FOLDER_CLEANER_TIME=14\n' +
     'FILE_COUNTER=5\n' +
