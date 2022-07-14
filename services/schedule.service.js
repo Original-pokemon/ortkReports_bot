@@ -13,6 +13,7 @@ function stopScedulePanelServise(
     const arr = await getArrUserNameByFolders()
 
     let msg
+
     if (arr.length > 0) {
       const firstPart = await getArrUserNameByFolders('full')
       const secondPart = diff(firstPart, await getArrUserNameByFolders())
@@ -29,7 +30,7 @@ function stopScedulePanelServise(
         reply_markup: new InlineKeyboard().text('Посмотреть отчеты', 'reports'),
       })
     })
-    async function getArrUserNameByFolders(condition, view) {
+    async function getArrUserNameByFolders(condition) {
       let arrFolder
       if (condition === 'full') {
         arrFolder = await folderRepositoty.getFolderByCounter(
@@ -39,8 +40,10 @@ function stopScedulePanelServise(
       } else {
         arrFolder = await folderRepositoty.getFolderByCounter(1, new Date())
       }
+
       const arrUserId = arrFolder.map((item) => item.attachedToUserId)
-      const arrUsersName = await userRepositoty.getUsersNameById(arrUserId)
+      const arrUsersName = await userRepositoty.getUsersNameArrById(arrUserId)
+      // console.log(arrUsersName, 'arrUsersName')
       return arrUsersName
     }
     function diff(a1, a2) {

@@ -40,7 +40,7 @@ class UsersRepository {
     const users = await userModel.find({ userGroup: 'admin' }).exec()
     return users
   }
-  async getUsersNameById(idArr) {
+  async getUsersNameArrById(idArr) {
     if (idArr.length > 0) {
       const arr = idArr.map((item) => {
         const obj = {
@@ -48,7 +48,7 @@ class UsersRepository {
         }
         return obj
       })
-      const usersArr = await userModel.find({ $and: arr })
+      const usersArr = await userModel.find({ $or: arr })
       return usersArr.map((item) => item.telegramName)
     }
     return []
