@@ -68,7 +68,13 @@ const {
 
 mongoose.connect(config.MONGODB_CONNECTION_STRING)
 
-bot.use(authMiddleware(new UsersRepository()))
+bot.use(
+  authMiddleware(
+    new UsersRepository(),
+    new FoldersRepository(),
+    getVariables('./config.txt', 'ROOT_PATH')
+  )
+)
 
 startRoute(bot, startService(new UsersRepository()))
 adminRoute(
@@ -97,7 +103,7 @@ scheduleRoute(
     getVariables('./config.txt', 'ROOT_PATH')
   ),
   getVariables('./config.txt', 'START_TIME'),
-  getVariables('./config.txt', 'STOP_TIME'),
+  getVariables('./config.txt', 'STOP_TIME')
 )
 reportsRoute(
   bot,

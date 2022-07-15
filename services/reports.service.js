@@ -64,17 +64,15 @@ function downloadPhotoServise(
   photoLimit
 ) {
   return async (ctx) => {
-    const userLogin = ctx.from.username
     const chatId = ctx.msg.chat.id
-    const user = await userRepositoty.getUser({
-      $and: [{ tegramName: userLogin }, { telegramId: chatId }],
-    })
+    const user = await userRepositoty.getUser({ telegramId: chatId })
+    const userName = user.telegramName
 
     const date = new Date()
     const folderDir = `${date.getDate()}-${
       date.getMonth() + 1
     }-${date.getFullYear()}`
-    const folderPath = `${rootPath}${userLogin}\\${folderDir}\\`
+    const folderPath = `${rootPath}${userName}\\${folderDir}\\`
     let folder
     access(folderPath, constants.F_OK, async (err) => {
       if (err) {
@@ -105,7 +103,7 @@ function downloadPhotoServise(
         : 'На сегодня все отчеты приняты!'
 
     await botInstance.api.sendMessage(chatId, text)
-    
+
     function getRandomFileName() {
       const timestamp = new Date().toISOString().replace(/[-:.]/g, '')
       const random = ('' + Math.random()).substring(2, 8)

@@ -24,7 +24,12 @@ function getVariables(path, varName) {
 
   const data = readFileSync(path, 'utf8')
   const arr = data.split('\n')
-  const dataArr = arr.map((item) => item.split('=')).flat()
+  const dataArr = arr
+    .map((item) => {
+      item = item.replaceAll('\r', '')
+      return item.split('=')
+    })
+    .flat()
   const indexElem = dataArr.findIndex((item) => item === varName) + 1
   // console.log(1, dataArr[indexElem])
   return dataArr[indexElem]
