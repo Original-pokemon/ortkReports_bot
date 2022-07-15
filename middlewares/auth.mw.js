@@ -8,13 +8,10 @@ module.exports = function authMiddleware(
   return async function (ctx, next) {
     const userId = ctx.chat.id
     const userLogin = ctx.chat?.username
-    const userName = userLogin
-      ? userLogin
-      : ctx.chat.first_name + ctx.chat?.last_name
-      ? ''
-      : ctx.chat?.last_name
-    const newName = userName
-
+    const first_name = ctx.chat.first_name
+    const last_name = ctx.chat.last_name ? `_${ctx.chat.last_name}` : ''
+    const userName = userLogin ? userLogin : first_name + last_name
+    console.log(userName)
     let user = await userRepository.getUser({ telegramId: userId })
     ctx.session.user = user
     if (!user) {
@@ -37,9 +34,8 @@ module.exports = function authMiddleware(
     else ctx.session.isAdmin = false
     if (process.env.MAIN_ADMIN_ID == userId) ctx.session.isTopAdmin = true
 
-    rename(rootPath + oldName, rootPath + newName, (err) => {
+    rename(rootPath + oldName, rootPath + userName, (err) => {
       if (err) {
-        throw err
       }
     })
 
