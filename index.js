@@ -98,7 +98,6 @@ scheduleRoute(
   ),
   getVariables('./config.txt', 'START_TIME'),
   getVariables('./config.txt', 'STOP_TIME'),
-  getVariables('./config.txt', 'FOLDER_CLEANER_TIME')
 )
 reportsRoute(
   bot,

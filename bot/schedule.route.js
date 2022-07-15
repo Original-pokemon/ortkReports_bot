@@ -5,7 +5,6 @@ module.exports = function scheduleRoute(
   cleanerFolderService,
   startTime,
   stopTime,
-  cleanerTime
 ) {
   schedule.scheduleJob(startTime, function () {
     startScedulePanelService()
