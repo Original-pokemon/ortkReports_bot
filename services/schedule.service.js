@@ -1,5 +1,5 @@
 const { InlineKeyboard } = require('grammy')
-const { readdir, rmdir, unlink } = require('fs')
+const { readdir, rmdir, unlink, access, constants } = require('fs')
 
 function stopScedulePanelServise(
   botInstance,
@@ -83,11 +83,11 @@ function cleanerFolderSevrvice(
       0,
       0
     )
+
     const foldersArr = await folderRepositoty.getFoldersByDate(
       date - cleanerTime * 24 * 3600 * 1000
     )
-
-    if (foldersArr.length > 1) {
+    if (foldersArr.length > 0) {
       foldersArr.forEach(async (item) => {
         const folderPath = item.path
         const user = await userRepositoty.getUser({
@@ -97,25 +97,29 @@ function cleanerFolderSevrvice(
         const path = `${rootPath}${userPath}\\${folderPath}\\`
         await listObjects(path)
         await folderRepositoty.deleteFolder(item.uuid)
+        console.log('Удалена папка: ' + path)
       })
     }
 
     async function listObjects(path) {
-      rmdir(path, (err) => {
+      access(path, constants.F_OK, async (err) => {
         if (err) {
-          readdir(path, (err, files) => {
-            if (err) throw err
-
-            console.log(files)
-
-            for (let file of files) {
-              unlink(path + file, (err) => {
-                if (err) throw err
-              })
-            }
-          })
+          return
         }
-        listObjects(path)
+        rmdir(path, (err) => {
+          if (err) {
+            readdir(path, (err, files) => {
+              if (err) throw err
+
+              for (let file of files) {
+                unlink(path + file, (err) => {
+                  if (err) throw err
+                })
+              }
+            })
+          }
+          listObjects(path)
+        })
       })
     }
   }
