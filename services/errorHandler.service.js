@@ -2,6 +2,7 @@ const { access, open, constants, writeFile, readFile } = require('fs')
 const { GrammyError, HttpError } = require('grammy')
 
 function errorHandlerService(err) {
+  const date = new Date()
   const ctx = err.ctx
   console.error(`Error while handling update ${ctx.update.update_id}:`)
   const e = err.error
@@ -16,19 +17,28 @@ function errorHandlerService(err) {
     if (error) throw error
 
     if (e instanceof GrammyError) {
-      const text = fileContent + `Error in request: ${e.description}`
+      const text =
+        fileContent +
+        `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ` +
+        `Error in request: ${e.description}\n`
       console.error(text)
       writeFile('./log.txt', text, (err) => {
         if (err) throw err
       })
     } else if (e instanceof HttpError) {
-      const text = fileContent + `Could not contact Telegram: ${e}`
+      const text =
+        fileContent +
+        `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}  ` +
+        `Could not contact Telegram: ${e}\n`
       console.error(text)
       writeFile('./log.txt', `Could not contact Telegram: ${e}`, (err) => {
         if (err) throw err
       })
     } else {
-      const text = fileContent + `Unknown error: ${e}`
+      const text =
+        fileContent +
+        `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ` +
+        `Unknown error: ${e}\n`
       console.error(text)
       writeFile('./log.txt', text, (err) => {
         if (err) throw err
