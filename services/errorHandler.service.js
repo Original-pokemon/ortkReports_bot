@@ -19,8 +19,9 @@ function errorHandlerService(err) {
     if (e instanceof GrammyError) {
       const text =
         fileContent +
+        '\n' +
         `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ` +
-        `Error in request: ${e.description}\n`
+        `Error in request: ${e.description}`
       console.error(text)
       writeFile('./log.txt', text, (err) => {
         if (err) throw err
@@ -28,8 +29,9 @@ function errorHandlerService(err) {
     } else if (e instanceof HttpError) {
       const text =
         fileContent +
+        '\n' +
         `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}  ` +
-        `Could not contact Telegram: ${e}\n`
+        `Could not contact Telegram: ${e}`
       console.error(text)
       writeFile('./log.txt', `Could not contact Telegram: ${e}`, (err) => {
         if (err) throw err
@@ -37,8 +39,10 @@ function errorHandlerService(err) {
     } else {
       const text =
         fileContent +
+        '\n' +
         `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ` +
-        `Unknown error: ${e}\n`
+        `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ` +
+        `Unknown error: ${e}`
       console.error(text)
       writeFile('./log.txt', text, (err) => {
         if (err) throw err
