@@ -26,7 +26,7 @@ function getVariables(path, varName) {
   const arr = data.split('\n')
   const dataArr = arr
     .map((item) => {
-      item = item.replaceAll('\r', '')
+      item = item.replace('\r', '')
       return item.split('=')
     })
     .flat()

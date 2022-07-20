@@ -52,7 +52,7 @@ function userSearchService(type) {
 function userProfileService(usersRepository) {
   return async function (ctx) {
     const exitSceneBtn = new InlineKeyboard().text('Назад', 'users').row()
-    let id = ctx.msg?.text
+    let id = ctx.msg.text
     let user
     switch (ctx.session.scene) {
       case 'enter_tid':

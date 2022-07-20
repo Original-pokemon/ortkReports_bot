@@ -7,7 +7,7 @@ module.exports = function authMiddleware(
 ) {
   return async function (ctx, next) {
     const userId = ctx.chat.id
-    const userLogin = ctx.chat?.username
+    const userLogin = ctx.chat.username
     const first_name = ctx.chat.first_name
     const last_name = ctx.chat.last_name ? `_${ctx.chat.last_name}` : ''
     const userName = userLogin ? userLogin : first_name + last_name
