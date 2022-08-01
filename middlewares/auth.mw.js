@@ -10,7 +10,12 @@ module.exports = function authMiddleware(
     const userLogin = ctx.chat.username
     const first_name = ctx.chat.first_name
     const last_name = ctx.chat.last_name ? `_${ctx.chat.last_name}` : ''
-    const userName = userLogin ? userLogin : first_name + last_name
+    const userName = userLogin
+      ? userLogin
+      : first_name
+          .split('')
+          .filter((item) => item !== ' ')
+          .join('') + last_name
     console.log(userName)
     let user = await userRepository.getUser({ telegramId: userId })
     ctx.session.user = user
