@@ -3,7 +3,7 @@ const { InlineKeyboard } = require('grammy')
 function adminService() {
   return async function (ctx) {
     await ctx.editMessageText(
-      'Здесь вы можете посмотреть пользователей которые скинули/не скинули фотографии, а так же управлять пользоватеми!',
+      'Здесь вы можете посмотреть пользователей которые скинули/не скинули фотографии, а так же управлять ими!',
       {
         reply_markup: new InlineKeyboard()
           .text('Посмотреть отчеты', 'reports')
