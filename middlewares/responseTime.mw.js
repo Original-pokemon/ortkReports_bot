@@ -9,8 +9,6 @@ module.exports = async function responseTimeMiddleware(ctx, next) {
   console.log(
     `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
     `Response time: ${after - before} ms`,
-    ctx.update.callback_query.data === undefined
-      ? null
-      : ctx.update.callback_query.data
+    ctx.update.callback_query.data ? ctx.update.callback_query.data : null
   )
 }
