@@ -66,12 +66,7 @@ function startScedulePanelService(botInstance, userRepositoty) {
   }
 }
 
-function cleanerFolderSevrvice(
-  userRepositoty,
-  folderRepositoty,
-  cleanerTime,
-  rootPath
-) {
+function cleanerFolderSevrvice(userRepositoty, folderRepositoty, cleanerTime) {
   return async function () {
     const now = new Date()
     const date = new Date(
@@ -94,7 +89,7 @@ function cleanerFolderSevrvice(
           uuid: item.attachedToUserId,
         })
         const userPath = user.telegramName
-        const path = `${rootPath}${userPath}\\${folderPath}\\`
+        const path = `${process.env.ROOT_PATH}${userPath}\\${folderPath}\\`
         await listObjects(path)
         await folderRepositoty.deleteFolder(item.uuid)
         console.log('Удалена папка: ' + path)

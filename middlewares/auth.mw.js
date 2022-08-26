@@ -1,10 +1,6 @@
 const { rename } = require('fs')
 
-module.exports = function authMiddleware(
-  userRepository,
-  folderRepository,
-  rootPath
-) {
+module.exports = function authMiddleware(userRepository, folderRepository) {
   return async function (ctx, next) {
     const userId = ctx.chat.id
     const userLogin = ctx.chat.username
@@ -39,10 +35,14 @@ module.exports = function authMiddleware(
     else ctx.session.isAdmin = false
     if (process.env.MAIN_ADMIN_ID == userId) ctx.session.isTopAdmin = true
 
-    rename(rootPath + oldName, rootPath + userName, (err) => {
-      if (err) {
+    rename(
+      process.env.ROOT_PATH + oldName,
+      process.env.ROOT_PATH + userName,
+      (err) => {
+        if (err) {
+        }
       }
-    })
+    )
 
     await userRepository.updateUser(user.uuid, {
       telegramName: userName,

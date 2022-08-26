@@ -2,9 +2,9 @@ const { InlineKeyboard } = require('grammy')
 const { access, constants, mkdir, readdirSync } = require('fs')
 const { InputFile } = require('grammy')
 
-function mainReportsService(rootPath) {
+function mainReportsService() {
   return async function (ctx) {
-    const folderPath = `${rootPath}`
+    const folderPath = `${process.env.ROOT_PATH}`
 
     const files = readdirSync(folderPath)
 
@@ -24,10 +24,10 @@ function mainReportsService(rootPath) {
 }
 // эта функция фильтрует пользователей больше 5 отчетов или меньше
 
-function sendDateService(rootPath) {
+function sendDateService() {
   return async function (ctx) {
     const callBackArr = ctx.update.callback_query.data.split(/date_+/g)
-    const folderPath = `${rootPath}${callBackArr[1]}`
+    const folderPath = `${process.env.ROOT_PATH}${callBackArr[1]}`
     const files = readdirSync(folderPath)
     const markup = new InlineKeyboard()
 
@@ -42,10 +42,10 @@ function sendDateService(rootPath) {
   }
 }
 
-function sendReportsService(rootPath) {
+function sendReportsService() {
   return async function (ctx) {
     const callBackArr = ctx.update.callback_query.data.split(/reports_+/g)
-    const folderPath = `${rootPath}${callBackArr[1]}`
+    const folderPath = `${process.env.ROOT_PATH}${callBackArr[1]}`
     const files = readdirSync(folderPath)
     const filePathArr = files.map((item) => {
       return { type: 'photo', media: new InputFile(folderPath + '\\' + item) }
@@ -59,7 +59,6 @@ function downloadPhotoServise(
   botInstance,
   folderRepository,
   userRepositoty,
-  rootPath,
   fileCounter,
   photoLimit
 ) {
@@ -72,7 +71,7 @@ function downloadPhotoServise(
     const folderDir = `${date.getDate()}-${
       date.getMonth() + 1
     }-${date.getFullYear()}`
-    const folderPath = `${rootPath}${userName}\\${folderDir}\\`
+    const folderPath = `${process.env.ROOT_PATH}${userName}\\${folderDir}\\`
     let folder
     access(folderPath, constants.F_OK, async (err) => {
       if (err) {
