@@ -10,8 +10,9 @@ dotenv.config()
 const config = process.env
 const bot = new Bot(config.BOT_TOKEN)
 
-const authMiddleware = require('./middlewares/auth.mw')
 const router = new Router((ctx) => ctx.session.scene)
+
+const authMiddleware = require('./middlewares/auth.mw')
 const responseTimeMiddleware = require('./middlewares/responseTime.mw')
 
 bot.use(responseTimeMiddleware)
@@ -33,8 +34,9 @@ bot.use(router)
 
 const { FoldersRepository } = require('./repositories/folders.repository')
 const { UsersRepository } = require('./repositories/users.repository')
+const { VariablesRepository } = require('./repositories/variables.repository')
 
-const { getVariables } = require('./services/variables.service')
+const { getVariables, checkVariables } = require('./services/variables.service')
 
 const { errorHandlerService } = require('./services/errorHandler.service')
 
@@ -68,15 +70,12 @@ const {
 
 mongoose.connect(config.MONGODB_CONNECTION_STRING)
 
-bot.use(
-  authMiddleware(
-    new UsersRepository(),
-    new FoldersRepository(),
-    getVariables('./config.txt', 'ROOT_PATH')
-  )
-)
+checkVariables(new VariablesRepository())
+
+bot.use(authMiddleware(new UsersRepository(), new FoldersRepository()))
 
 startRoute(bot, startService(new UsersRepository()))
+
 adminRoute(
   bot,
   router,
@@ -87,37 +86,39 @@ adminRoute(
   userBanService(new UsersRepository()),
   userPromoteService(new UsersRepository())
 )
+
 scheduleRoute(
   schedule,
   startScedulePanelService(bot, new UsersRepository()),
   stopScedulePanelServise(
     bot,
-    getVariables('./config.txt', 'FILE_COUNTER'),
+    getVariables(new VariablesRepository(), 'fileCounter'),
     new UsersRepository(),
     new FoldersRepository()
   ),
   cleanerFolderSevrvice(
     new UsersRepository(),
     new FoldersRepository(),
-    getVariables('./config.txt', 'FOLDER_CLEANER_TIME'),
-    getVariables('./config.txt', 'ROOT_PATH')
+    getVariables(new VariablesRepository(), 'folderCleanerTime')
   ),
-  getVariables('./config.txt', 'START_TIME'),
-  getVariables('./config.txt', 'STOP_TIME')
+  getVariables(new VariablesRepository(), 'startTime'),
+  getVariables(new VariablesRepository(), 'stopTime')
 )
+
 reportsRoute(
   bot,
-  mainReportsService(getVariables('./config.txt', 'ROOT_PATH')),
-  sendDateService(getVariables('./config.txt', 'ROOT_PATH')),
-  sendReportsService(getVariables('./config.txt', 'ROOT_PATH')),
+  mainReportsService(),
+  sendDateService(),
+  sendReportsService(),
   downloadPhotoServise(
     bot,
     new FoldersRepository(),
     new UsersRepository(),
-    getVariables('./config.txt', 'ROOT_PATH'),
-    getVariables('./config.txt', 'FILE_COUNTER'),
-    getVariables('./config.txt', 'PHOTO_LIMIT')
+    getVariables(new VariablesRepository(), 'fileCounter'),
+    getVariables(new VariablesRepository(), 'PhotoLimit')
   )
 )
+
 bot.catch((err) => errorHandlerService(err))
+
 bot.start()
