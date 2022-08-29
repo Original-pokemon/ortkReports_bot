@@ -36,7 +36,7 @@ const { FoldersRepository } = require('./repositories/folders.repository')
 const { UsersRepository } = require('./repositories/users.repository')
 const { VariablesRepository } = require('./repositories/variables.repository')
 
-const { getVariables, checkVariables } = require('./services/variables.service')
+const { checkVariables } = require('./services/variables.service')
 
 const { errorHandlerService } = require('./services/errorHandler.service')
 
@@ -92,17 +92,16 @@ scheduleRoute(
   startScedulePanelService(bot, new UsersRepository()),
   stopScedulePanelServise(
     bot,
-    getVariables(new VariablesRepository(), 'fileCounter'),
+    new VariablesRepository(),
     new UsersRepository(),
     new FoldersRepository()
   ),
   cleanerFolderSevrvice(
     new UsersRepository(),
     new FoldersRepository(),
-    getVariables(new VariablesRepository(), 'folderCleanerTime')
+    new VariablesRepository()
   ),
-  getVariables(new VariablesRepository(), 'startTime'),
-  getVariables(new VariablesRepository(), 'stopTime')
+  new VariablesRepository()
 )
 
 reportsRoute(
@@ -114,8 +113,7 @@ reportsRoute(
     bot,
     new FoldersRepository(),
     new UsersRepository(),
-    getVariables(new VariablesRepository(), 'fileCounter'),
-    getVariables(new VariablesRepository(), 'PhotoLimit')
+    new VariablesRepository()
   )
 )
 

@@ -59,20 +59,25 @@ function downloadPhotoServise(
   botInstance,
   folderRepository,
   userRepositoty,
-  fileCounter,
-  photoLimit
+  variablesRepository
 ) {
   return async (ctx) => {
+    const photoLimit = await variablesRepository.getVariable('photoLimit')
+    const fileCounter = await variablesRepository.getVariable('fileCounter')
+
+    console.log(photoLimit, fileCounter)
+
     const chatId = ctx.msg.chat.id
     const user = await userRepositoty.getUser({ telegramId: chatId })
     const userName = user.telegramName
-
     const date = new Date()
     const folderDir = `${date.getDate()}-${
       date.getMonth() + 1
     }-${date.getFullYear()}`
     const folderPath = `${process.env.ROOT_PATH}${userName}\\${folderDir}\\`
+
     let folder
+
     access(folderPath, constants.F_OK, async (err) => {
       if (err) {
         mkdir(folderPath, { recursive: true }, (err) => {

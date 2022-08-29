@@ -3,11 +3,12 @@ const { readdir, rmdir, unlink, access, constants } = require('fs')
 
 function stopScedulePanelServise(
   botInstance,
-  fileCounter,
+  variablesRepository,
   userRepositoty,
   folderRepositoty
 ) {
   return async function () {
+    const fileCounter = await variablesRepository.getVariable('fileCounter')
     const arrUsers = await userRepositoty.getAdmins()
     const arrTgId = arrUsers.map((item) => item.telegramId)
     const arr = await getArrUserNameByFolders()
@@ -66,9 +67,15 @@ function startScedulePanelService(botInstance, userRepositoty) {
   }
 }
 
-function cleanerFolderSevrvice(userRepositoty, folderRepositoty, cleanerTime) {
+function cleanerFolderSevrvice(
+  userRepositoty,
+  folderRepositoty,
+  variablesRepository
+) {
   return async function () {
-    const now = new Date()
+    const cleanerTime = await variablesRepository.getVariable(
+      'folderCleanerTime'
+    )
     const date = new Date(
       now.getFullYear(),
       now.getMonth(),

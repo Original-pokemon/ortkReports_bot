@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+
 const VariablesSchema = new Schema({
   startTime: {
     type: String,
@@ -10,6 +11,11 @@ const VariablesSchema = new Schema({
     required: true,
     default: '0 19 * * *',
   },
+  cleanerTime: {
+    type: String,
+    required: true,
+    default: '* * */1 * *',
+  },
   folderCleanerTime: {
     type: Number,
     required: true,
@@ -20,7 +26,7 @@ const VariablesSchema = new Schema({
     required: true,
     default: 5,
   },
-  PhotoLimit: {
+  photoLimit: {
     type: Number,
     required: true,
     default: 10,

@@ -1,18 +1,22 @@
-module.exports = function scheduleRoute(
+module.exports = async function scheduleRoute(
   schedule,
   startScedulePanelService,
   stopScedulePanelService,
   cleanerFolderService,
-  startTime,
-  stopTime,
+  variablesRepository
 ) {
+  const startTime = await variablesRepository.getVariable('startTime')
+  const stopTime = await variablesRepository.getVariable('stopTime')
+  const cleanerTime = await variablesRepository.getVariable('cleanerTime')
+  console.log(startTime + '\n', cleanerTime + '\n', stopTime)
+
   schedule.scheduleJob(startTime, function () {
     startScedulePanelService()
   })
   schedule.scheduleJob(stopTime, function () {
     stopScedulePanelService()
   })
-  schedule.scheduleJob('* * * * * 7', function () {
+  schedule.scheduleJob(cleanerTime, function () {
     cleanerFolderService()
   })
 }

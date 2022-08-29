@@ -1,9 +1,3 @@
-async function getVariables(variablesRepository, varName) {
-  const arr = await variablesRepository.getVariables()
-  const obj = arr[0]
-  return obj[varName]
-}
-
 async function checkVariables(variablesRepository) {
   const result = await variablesRepository.getVariables()
   if (!result.length) {
@@ -18,6 +12,5 @@ async function checkVariables(variablesRepository) {
 }
 
 module.exports = {
-  getVariables,
   checkVariables,
 }
