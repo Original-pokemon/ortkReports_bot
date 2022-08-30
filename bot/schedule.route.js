@@ -8,7 +8,6 @@ module.exports = async function scheduleRoute(
   const startTime = await variablesRepository.getVariable('startTime')
   const stopTime = await variablesRepository.getVariable('stopTime')
   const cleanerTime = await variablesRepository.getVariable('cleanerTime')
-  console.log(startTime + '\n', cleanerTime + '\n', stopTime)
 
   schedule.scheduleJob(startTime, function () {
     startScedulePanelService()
