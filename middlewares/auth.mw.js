@@ -21,9 +21,6 @@ module.exports = function authMiddleware(userRepository, folderRepository) {
         telegramName: userName,
       })
     }
-    const folder = await folderRepository.getFolder({
-      attachedToUserId: user.uuid,
-    })
     const oldName = user.telegramName
 
     if (user.userGroup == 'banned')
@@ -36,8 +33,8 @@ module.exports = function authMiddleware(userRepository, folderRepository) {
     if (process.env.MAIN_ADMIN_ID == userId) ctx.session.isTopAdmin = true
 
     rename(
-      process.env.ROOT_PATH + oldName,
-      process.env.ROOT_PATH + userName,
+      process.env.ROOT_PATH + '\\folders' + oldName,
+      process.env.ROOT_PATH + '\\folders' + userName,
       (err) => {
         if (err) {
         }
