@@ -65,7 +65,7 @@ const scheduleRoute = require('./bot/schedule.route')
 const {
   stopScedulePanelServise,
   startScedulePanelService,
-  cleanerFolderSevrvice,
+  cleanerFolderService,
 } = require('./services/schedule.service')
 
 mongoose.connect(config.MONGODB_CONNECTION_STRING)
@@ -96,7 +96,7 @@ scheduleRoute(
     new UsersRepository(),
     new FoldersRepository()
   ),
-  cleanerFolderSevrvice(
+  cleanerFolderService(
     new UsersRepository(),
     new FoldersRepository(),
     new VariablesRepository()

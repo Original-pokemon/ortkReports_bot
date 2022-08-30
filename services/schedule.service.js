@@ -26,6 +26,7 @@ function stopScedulePanelServise(
     } else {
       msg = `Сегодня отчеты никто не скинул`
     }
+
     arrTgId.forEach((item) => {
       botInstance.api.sendMessage(item, msg, {
         reply_markup: new InlineKeyboard().text('Посмотреть отчеты', 'reports'),
@@ -44,9 +45,9 @@ function stopScedulePanelServise(
 
       const arrUserId = arrFolder.map((item) => item.attachedToUserId)
       const arrUsersName = await userRepositoty.getUsersNameArrById(arrUserId)
-      // console.log(arrUsersName, 'arrUsersName')
       return arrUsersName
     }
+
     function diff(a1, a2) {
       return a1
         .filter((i) => !a2.includes(i))
@@ -58,16 +59,24 @@ function stopScedulePanelServise(
 function startScedulePanelService(botInstance, userRepositoty) {
   return async function () {
     const arrUsers = await userRepositoty.getAll()
-
     const arrTgId = arrUsers.map((item) => item.telegramId)
 
-    arrTgId.forEach((item) => {
-      botInstance.api.sendMessage(item, `Пришло время отправлять отчеты!`)
+    arrTgId.forEach(async (item) => {
+      try {
+        await botInstance.api.sendMessage(
+          item,
+          `Пришло время отправлять отчеты!`
+        )
+      } catch (error) {
+        if (error) {
+          throw error
+        }
+      }
     })
   }
 }
 
-function cleanerFolderSevrvice(
+function cleanerFolderService(
   userRepositoty,
   folderRepositoty,
   variablesRepository
@@ -76,6 +85,7 @@ function cleanerFolderSevrvice(
     const cleanerTime = await variablesRepository.getVariable(
       'folderCleanerTime'
     )
+    const now = new Date()
     const date = new Date(
       now.getFullYear(),
       now.getMonth(),
@@ -89,6 +99,7 @@ function cleanerFolderSevrvice(
     const foldersArr = await folderRepositoty.getFoldersByDate(
       date - cleanerTime * 24 * 3600 * 1000
     )
+
     if (foldersArr.length > 0) {
       foldersArr.forEach(async (item) => {
         const folderPath = item.path
@@ -96,7 +107,7 @@ function cleanerFolderSevrvice(
           uuid: item.attachedToUserId,
         })
         const userPath = user.telegramName
-        const path = `${process.env.ROOT_PATH}${userPath}\\${folderPath}\\`
+        const path = `${process.env.ROOT_PATH}\\folders\\${userPath}\\${folderPath}\\`
         await listObjects(path)
         await folderRepositoty.deleteFolder(item.uuid)
         console.log('Удалена папка: ' + path)
@@ -130,5 +141,5 @@ function cleanerFolderSevrvice(
 module.exports = {
   startScedulePanelService,
   stopScedulePanelServise,
-  cleanerFolderSevrvice,
+  cleanerFolderService,
 }
