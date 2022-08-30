@@ -116,9 +116,8 @@ function cleanerFolderService(
 
     async function listObjects(path) {
       access(path, constants.F_OK, async (err) => {
-        if (err) {
-          return
-        }
+        if (err) return
+        console.log(err)
         rmdir(path, (err) => {
           if (err) {
             readdir(path, (err, files) => {
@@ -129,9 +128,9 @@ function cleanerFolderService(
                   if (err) throw err
                 })
               }
+              listObjects(path)
             })
           }
-          listObjects(path)
         })
       })
     }
