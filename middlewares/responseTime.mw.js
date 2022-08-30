@@ -1,5 +1,5 @@
 module.exports = async function responseTimeMiddleware(ctx, next) {
-  const date = new Date()
+  const now = new Date()
   const before = Date.now() // milliseconds
   // invoke downstream middleware
   await next() // make sure to `await`!
@@ -7,8 +7,9 @@ module.exports = async function responseTimeMiddleware(ctx, next) {
   const after = Date.now() // milliseconds
   // log difference
   console.log(
-    `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+    `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} `,
+    `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`,
     `Response time: ${after - before} ms`,
-    ctx.update.callback_query?.data ? ctx.update.callback_query.data : null
+    ctx.update.callback_query?.data || ctx.update.message?.text || 'photo'
   )
 }
