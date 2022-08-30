@@ -4,7 +4,7 @@ const { InputFile } = require('grammy')
 
 function mainReportsService() {
   return async function (ctx) {
-    const folderPath = `${process.env.ROOT_PATH}`
+    const folderPath = `${process.env.ROOT_PATH}\\folders`
 
     const files = readdirSync(folderPath)
 
@@ -27,7 +27,7 @@ function mainReportsService() {
 function sendDateService() {
   return async function (ctx) {
     const callBackArr = ctx.update.callback_query.data.split(/date_+/g)
-    const folderPath = `${process.env.ROOT_PATH}${callBackArr[1]}`
+    const folderPath = `${process.env.ROOT_PATH}\\folders\\${callBackArr[1]}`
     const files = readdirSync(folderPath)
     const markup = new InlineKeyboard()
 
@@ -45,7 +45,7 @@ function sendDateService() {
 function sendReportsService() {
   return async function (ctx) {
     const callBackArr = ctx.update.callback_query.data.split(/reports_+/g)
-    const folderPath = `${process.env.ROOT_PATH}${callBackArr[1]}`
+    const folderPath = `${process.env.ROOT_PATH}\\folders\\${callBackArr[1]}`
     const files = readdirSync(folderPath)
     const filePathArr = files.map((item) => {
       return { type: 'photo', media: new InputFile(folderPath + '\\' + item) }
@@ -74,7 +74,7 @@ function downloadPhotoServise(
     const folderDir = `${date.getDate()}-${
       date.getMonth() + 1
     }-${date.getFullYear()}`
-    const folderPath = `${process.env.ROOT_PATH}${userName}\\${folderDir}\\`
+    const folderPath = `${process.env.ROOT_PATH}\\folders\\${userName}\\${folderDir}\\`
 
     let folder
 
