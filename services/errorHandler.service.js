@@ -2,52 +2,44 @@ const { access, open, constants, writeFile, readFile } = require('fs')
 const { GrammyError, HttpError } = require('grammy')
 
 function errorHandlerService(err) {
-  const date = new Date()
-  const ctx = err.ctx
-  console.error(`Error while handling update ${ctx.update.update_id}:`)
+  const now = new Date()
   const e = err.error
-  access('./log.txt', constants.F_OK, (err) => {
-    if (err) {
-      open('./log.txt', 'w', (err) => {
-        if (err) throw err
-      })
-    }
-  })
-  readFile('./log.txt', 'utf8', function (error, fileContent) {
-    if (error) throw error
+  const date =
+    `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ` +
+    `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} `
 
-    if (e instanceof GrammyError) {
-      const text =
-        fileContent +
-        '\n' +
-        `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ` +
-        `Error in request: ${e.description}`
-      console.error(text)
-      writeFile('./log.txt', text, (err) => {
-        if (err) throw err
-      })
-    } else if (e instanceof HttpError) {
-      const text =
-        fileContent +
-        '\n' +
-        `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}  ` +
-        `Could not contact Telegram: ${e}`
-      console.error(text)
-      writeFile('./log.txt', `Could not contact Telegram: ${e}`, (err) => {
-        if (err) throw err
-      })
-    } else {
-      const text =
-        fileContent +
-        '\n' +
-        `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ` +
-        `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ` +
-        `Unknown error: ${e}`
-      console.error(text)
-      writeFile('./log.txt', text, (err) => {
+  access(`${process.env.ROOT_PATH}\\errors.txt`, constants.F_OK, (err) => {
+    if (err) {
+      open(`${process.env.ROOT_PATH}\\errors.txt`, 'w', (err) => {
         if (err) throw err
       })
     }
+    readFile(
+      `${process.env.ROOT_PATH}\\errors.txt`,
+      'utf8',
+      function (error, fileContent) {
+        const fileText = fileContent + '\n\n' + date + '\n\t' + e.stack
+        writeFile(`${process.env.ROOT_PATH}\\errors.txt`, fileText, (err) => {
+          if (err) throw err
+        })
+
+        if (error) throw error
+
+        if (e instanceof GrammyError) {
+          const text = date + `Error in request: ${e.description}`
+
+          console.error(text)
+        } else if (e instanceof HttpError) {
+          const text = date + `Could not contact Telegram: ${e}`
+
+          console.error(text)
+        } else {
+          const text = date + `Unknown error: ${e}`
+
+          console.error(text)
+        }
+      }
+    )
   })
 }
 
