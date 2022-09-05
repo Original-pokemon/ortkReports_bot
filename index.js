@@ -36,8 +36,6 @@ const { FoldersRepository } = require('./repositories/folders.repository')
 const { UsersRepository } = require('./repositories/users.repository')
 const { VariablesRepository } = require('./repositories/variables.repository')
 
-const { checkVariables } = require('./services/variables.service')
-
 const { errorHandlerService } = require('./services/errorHandler.service')
 
 const startRoute = require('./bot/start.route')
@@ -69,8 +67,6 @@ const {
 } = require('./services/schedule.service')
 
 mongoose.connect(config.MONGODB_CONNECTION_STRING)
-
-checkVariables(new VariablesRepository())
 
 bot.use(authMiddleware(new UsersRepository(), new FoldersRepository()))
 

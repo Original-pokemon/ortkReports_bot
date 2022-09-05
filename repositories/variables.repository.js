@@ -5,14 +5,26 @@ class VariablesRepository {
     const result = await variablesModel.create(data)
     return result
   }
-  async getVariables() {
-    const variablesData = await variablesModel.find().exec()
-    return variablesData
-  }
+
   async getVariable(varName) {
     const arrVaribles = await variablesModel.find().exec()
-    const objVariables = arrVaribles[0]
-    return objVariables[varName]
+
+    if (arrVaribles.length) {
+      const arrVaribles = await variablesModel.find().exec()
+      const objVariables = arrVaribles[0]
+      return objVariables[varName]
+    } else {
+      setTimeout(async () => {
+        let arrVaribles = await variablesModel.find().exec()
+        if (!arrVaribles.length) {
+          await variablesModel.create({})
+        }
+
+        const objVariables = arrVaribles[0]
+
+        return objVariables[varName]
+      }, 5000)
+    }
   }
 }
 
