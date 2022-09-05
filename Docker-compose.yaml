@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    container_name: bot-mogndodb
+    volumes:
+      - E:/Programming/MongoDB/Server/6.0/data:/data/db
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: bot:1.3.0
+    restart: always
+    container_name: bot
+    volumes:
+      - D:/bot:/home/bot/
+    env_file:
+      - .env
