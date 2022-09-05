@@ -7,7 +7,7 @@ module.exports = function (
 ) {
   botInstance.callbackQuery('reports', main)
   botInstance.callbackQuery(/date_[\wа-яА-Я\d]+/g, sendDate)
-  botInstance.callbackQuery(/reports_[\wа-яА-Я\d]+\\\d+-\d-\d+/g, sendReports)
+  botInstance.callbackQuery(/reports_[\wа-яА-Я\d]+.\d+-\d-\d+/g, sendReports)
 
   botInstance.on(':photo', downloadPhoto)
 }

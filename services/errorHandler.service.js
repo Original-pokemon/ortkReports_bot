@@ -8,18 +8,18 @@ function errorHandlerService(err) {
     `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ` +
     `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} `
 
-  access(`${process.env.ROOT_PATH}\\errors.txt`, constants.F_OK, (err) => {
+  access(`${process.env.MAIN_PATH}/errors.txt`, constants.F_OK, (err) => {
     if (err) {
-      open(`${process.env.ROOT_PATH}\\errors.txt`, 'w', (err) => {
+      open(`${process.env.MAIN_PATH}/errors.txt`, 'w', (err) => {
         if (err) throw err
       })
     }
     readFile(
-      `${process.env.ROOT_PATH}\\errors.txt`,
+      `${process.env.MAIN_PATH}/errors.txt`,
       'utf8',
       function (error, fileContent) {
         const fileText = fileContent + '\n\n' + date + '\n\t' + e.stack
-        writeFile(`${process.env.ROOT_PATH}\\errors.txt`, fileText, (err) => {
+        writeFile(`${process.env.MAIN_PATH}/errors.txt`, fileText, (err) => {
           if (err) throw err
         })
 

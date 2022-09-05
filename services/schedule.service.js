@@ -95,7 +95,6 @@ function cleanerFolderService(
       0,
       0
     )
-
     const foldersArr = await folderRepositoty.getFoldersByDate(
       date - cleanerTime * 24 * 3600 * 1000
     )
@@ -107,7 +106,7 @@ function cleanerFolderService(
           uuid: item.attachedToUserId,
         })
         const userPath = user.telegramName
-        const path = `${process.env.ROOT_PATH}\\folders\\${userPath}\\${folderPath}\\`
+        const path = `${process.env.MAIN_PATH}/folders/${userPath}/${folderPath}/`
         await listObjects(path)
         await folderRepositoty.deleteFolder(item.uuid)
         console.log('Удалена папка: ' + path)
@@ -117,7 +116,6 @@ function cleanerFolderService(
     async function listObjects(path) {
       access(path, constants.F_OK, async (err) => {
         if (err) return
-        console.log(err)
         rmdir(path, (err) => {
           if (err) {
             readdir(path, (err, files) => {

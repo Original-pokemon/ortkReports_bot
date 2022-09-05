@@ -33,8 +33,8 @@ module.exports = function authMiddleware(userRepository, folderRepository) {
     if (process.env.MAIN_ADMIN_ID == userId) ctx.session.isTopAdmin = true
 
     rename(
-      process.env.ROOT_PATH + '\\folders' + oldName,
-      process.env.ROOT_PATH + '\\folders' + userName,
+      process.env.MAIN_PATH + '/folders' + oldName,
+      process.env.MAIN_PATH + '/folders' + userName,
       (err) => {
         if (err) {
         }
