@@ -115,4 +115,6 @@ reportsRoute(
 
 bot.catch((err) => errorHandlerService(err))
 
+console.log('Bot started')
+
 bot.start()
