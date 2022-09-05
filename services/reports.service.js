@@ -4,7 +4,7 @@ const { InputFile } = require('grammy')
 
 function mainReportsService() {
   return async function (ctx) {
-    const folderPath = `${process.env.ROOT_PATH}\\folders`
+    const folderPath = `${process.env.MAIN_PATH}/folders`
 
     access(folderPath, constants.F_OK, async (err) => {
       if (err) {
