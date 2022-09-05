@@ -6,4 +6,6 @@ COPY . .
 
 RUN npm install
 
+ENV TZ=Europe/Moscow
+
 CMD ["node", "index.js"]
