@@ -6,20 +6,28 @@ function mainReportsService() {
   return async function (ctx) {
     const folderPath = `${process.env.ROOT_PATH}\\folders`
 
-    const files = readdirSync(folderPath)
-
-    const markup = new InlineKeyboard()
-    files.forEach((item) => {
-      markup.text(item, `date_${item}`).row()
-    })
-    markup.text('Назад', 'admin')
-
-    await ctx.editMessageText(
-      'Выберете пользователя, чьи отчеты Вас интересуют',
-      {
-        reply_markup: markup,
+    access(folderPath, constants.F_OK, async (err) => {
+      if (err) {
+        mkdir(folderPath, { recursive: true }, (err) => {
+          if (err) throw err
+        })
       }
-    )
+
+      const files = readdirSync(folderPath)
+
+      const markup = new InlineKeyboard()
+      files.forEach((item) => {
+        markup.text(item, `date_${item}`).row()
+      })
+      markup.text('Назад', 'admin')
+
+      return await ctx.editMessageText(
+        'Выберете пользователя, чьи отчеты Вас интересуют',
+        {
+          reply_markup: markup,
+        }
+      )
+    })
   }
 }
 // эта функция фильтрует пользователей больше 5 отчетов или меньше
